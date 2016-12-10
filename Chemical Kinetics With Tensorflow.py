@@ -66,7 +66,7 @@ x_sample[0]=x0 # record initial commponent concentration
 
 for i in range(NumSteps):# Run simulation for NumSteps
     x0=sess.run(xp,feed_dict={x:x0})# run numeric simulation step
-    if i%Lapse:# collect the concentration in lapse of several simulation steps for graph (once every Lapse Steps)
+    if (i%Lapse)==0:# collect the concentration in lapse of several simulation steps for graph (once every Lapse Steps)
         x_sample[round(i/Lapse)+1]=x0
         Tlapse[round(i/Lapse)+1]=i*In_dt
         
