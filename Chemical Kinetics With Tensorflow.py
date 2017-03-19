@@ -4,22 +4,16 @@ I will use standard notations for chemical kinetics described in:
 https://www.math.wisc.edu/~anderson/RecentTalks/2014/BIRS_TutorialPublic.pdf
 https://en.wikipedia.org/wiki/Chemical_reaction_network_theory
 For tensorflow toturial and installation see:http://learningtensorflow.com/
-
 Main components
 x: Conecnteration vector. x[i] is the concentration of the i component of the reaction in a given step.
-
 Yr: The reactants ratios for each component in each reaction in the system. Yr[i][j] is the equivalent/ratio of component i in the reactants of the j reaction.
-
 Yp: The product ratios for each component in each reaction in the system. Yp[i][j] is the equivalent/ratio of component i in the products of the j reaction.
-
 Example: For reaction 3A+2B->C+2D: Yr=[3,2,0,0] and Yp=[0,0,1,2]
 Example 2: For set of two reaction 2A->B and B->3C: Yr=[[2,0,0],[1,0,0]] and Yp=[[0,1,0],[0,0,3]]
-
 k: Rate consants vector. k[j] is the rate constant for reaction j.
 r: Reaction rate vector. r[j] is the rate of reaction j in current step. 
 dt:Time step for simulation
 dx: Change in concentration after one step in the model. dx[i] change in concentration of component i in current simulation step. 
-
 First step is to build tensorflow graph for single simulation step of the numeric equations with time step dt.
 The simulation step will be done in the function/method SimStep. 
 """
@@ -33,10 +27,10 @@ def SimStep(x,In_Yr,In_Yp,In_k,In_dt):
     dt=tf.constant(In_dt,tf.float32) # time lapse for each simulation step
     s1=tf.pow(x,Yr)
     s2=tf.reduce_prod(s1,1)
-    r=tf.mul(k,s2)#Reacion rates 
+    r=k*s2#Reacion rates 
     s4=tf.scalar_mul(dt,r)
     Yd=Yp-Yr # Change in concentrations attribute to each reaction
-    dxij=tf.mul(s4,tf.transpose(Yd))# concentration changes each reaction in this step***
+    dxij=s4*tf.transpose(Yd)# concentration changes each reaction in this step***
     dx=tf.reduce_sum(dxij,1) #sum of concentration changes from all reactions in this step***
     xp=x+dx#New concentration after steps  
     return(xp)
